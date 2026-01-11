@@ -12,7 +12,7 @@
 
 body {
   margin: 0;
-  font-family: "Segoe UI", sans-serif;
+  font-family: "proxima-nova", sans-serif;
   background: var(--bg);
   color: var(--dark);
 }
@@ -34,7 +34,6 @@ h1 {
 
 h2 {
   font-size: 28px;
-  margin-bottom: 20px;
 }
 
 p {
@@ -57,13 +56,13 @@ button:active {
   transform: scale(0.97);
 }
 
-/* Progress Bar */
+/* Progress */
 #progressBar {
   width: 100%;
   height: 10px;
   background: #e0e0e0;
   border-radius: 6px;
-  margin-bottom: 30px;
+  margin-bottom: 12px;
 }
 
 #progress {
@@ -74,20 +73,17 @@ button:active {
   transition: width 0.3s ease;
 }
 
+#questionCounter {
+  font-size: 16px;
+  color: var(--light);
+  margin-bottom: 20px;
+}
+
 /* Options */
 #options button {
   background: #fff;
   color: var(--dark);
   border: 2px solid var(--light);
-}
-
-#options button.correct {
-  background: var(--primary);
-  color: #fff;
-}
-
-#options button.wrong {
-  background: #ccc;
 }
 
 /* Result */
@@ -96,6 +92,11 @@ button:active {
   font-weight: bold;
   color: var(--primary);
   margin: 20px 0;
+}
+
+.gift-note {
+  font-size: 18px;
+  margin-bottom: 20px;
 }
 
 .form input {
