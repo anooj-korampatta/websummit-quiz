@@ -19,7 +19,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
-// Enable offline support
 enableIndexedDbPersistence(db).catch(() => {});
 
 export { collection, addDoc, serverTimestamp };
