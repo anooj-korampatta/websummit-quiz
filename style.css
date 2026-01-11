@@ -1,0 +1,107 @@
+:root {
+  --primary: #3FAE2A;
+  --secondary: #00ABC7;
+  --dark: #555555;
+  --light: #B5B5B5;
+  --bg: #F7F7F7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+}
+
+.screen {
+  display: none;
+  height: 100vh;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.screen.active {
+  display: block;
+}
+
+h1 {
+  font-size: 36px;
+}
+
+h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+p {
+  color: var(--light);
+}
+
+button {
+  width: 100%;
+  min-height: 70px;
+  font-size: 22px;
+  border: none;
+  border-radius: 12px;
+  background: var(--primary);
+  color: #fff;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+/* Progress Bar */
+#progressBar {
+  width: 100%;
+  height: 10px;
+  background: #e0e0e0;
+  border-radius: 6px;
+  margin-bottom: 30px;
+}
+
+#progress {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--secondary), var(--primary));
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+/* Options */
+#options button {
+  background: #fff;
+  color: var(--dark);
+  border: 2px solid var(--light);
+}
+
+#options button.correct {
+  background: var(--primary);
+  color: #fff;
+}
+
+#options button.wrong {
+  background: #ccc;
+}
+
+/* Result */
+#scoreCircle {
+  font-size: 48px;
+  font-weight: bold;
+  color: var(--primary);
+  margin: 20px 0;
+}
+
+.form input {
+  width: 100%;
+  min-height: 60px;
+  font-size: 20px;
+  margin: 10px 0;
+  padding: 10px;
+}
