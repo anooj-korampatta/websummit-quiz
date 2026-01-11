@@ -12,6 +12,7 @@ const resultScreen = document.getElementById("resultScreen");
 const questionEl = document.getElementById("question");
 const optionsEl = document.getElementById("options");
 const progressEl = document.getElementById("progress");
+const counterEl = document.getElementById("questionCounter");
 
 document.getElementById("startBtn").onclick = () => {
   startScreen.classList.remove("active");
@@ -25,6 +26,7 @@ function showQuestion() {
   optionsEl.innerHTML = "";
 
   progressEl.style.width = `${(current / questions.length) * 100}%`;
+  counterEl.innerText = `${current + 1} / ${questions.length}`;
 
   q.options.forEach((opt, i) => {
     const btn = document.createElement("button");
@@ -46,18 +48,39 @@ function handleAnswer(i) {
 }
 
 function getGift(score) {
-  if (score <= 4) return "☕ Coffee";
-  if (score === 5) return "🎁 Bronze Gift";
-  if (score === 6) return "🧢 Silver Gift";
-  return "🏅 Gold Premium Gift";
+  if (score <= 4) {
+    return {
+      label: "☕ Coffee Voucher",
+      message: "Please go to the Gift Counter and collect your Coffee Voucher."
+    };
+  }
+  if (score === 5) {
+    return {
+      label: "🎁 Bronze Gift",
+      message: "Please go to the Gift Counter and collect your Bronze Gift."
+    };
+  }
+  if (score === 6) {
+    return {
+      label: "🧢 Silver Gift",
+      message: "Please go to the Gift Counter and collect your Silver Gift."
+    };
+  }
+  return {
+    label: "🏅 Premium Gift",
+    message: "Congratulations! Please go to the Gift Counter and collect your Premium Gift."
+  };
 }
 
 function showResult() {
   quizScreen.classList.remove("active");
   resultScreen.classList.add("active");
 
+  const gift = getGift(score);
+
   document.getElementById("scoreCircle").innerText = `${score} / 8`;
-  document.getElementById("giftCategory").innerText = getGift(score);
+  document.getElementById("giftCategory").innerText = gift.label;
+  document.getElementById("giftMessage").innerText = gift.message;
 }
 
 document.getElementById("submitBtn").onclick = async () => {
@@ -65,7 +88,7 @@ document.getElementById("submitBtn").onclick = async () => {
     name: name.value,
     phone: phone.value,
     score,
-    gift: getGift(score),
+    gift: getGift(score).label,
     timeTaken: Math.floor((Date.now() - startTime) / 1000),
     createdAt: serverTimestamp()
   });
