@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Logistics Quiz</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- START SCREEN -->
+  <section id="startScreen" class="screen active">
+    <h1>SMART LOGISTICS QUIZ</h1>
+    <p>Test your Supply Chain IQ</p>
+    <button id="startBtn">TOUCH TO START</button>
+  </section>
+
+  <!-- QUIZ SCREEN -->
+  <section id="quizScreen" class="screen">
+    <div id="progressBar">
+      <div id="progress"></div>
+    </div>
+
+    <h2 id="question"></h2>
+    <div id="options"></div>
+  </section>
+
+  <!-- RESULT SCREEN -->
+  <section id="resultScreen" class="screen">
+    <h2>Your Score</h2>
+    <div id="scoreCircle"></div>
+    <h3 id="giftCategory"></h3>
+
+    <div class="form">
+      <input id="name" placeholder="Name" />
+      <input id="phone" placeholder="Phone Number" />
+      <button id="submitBtn">SUBMIT</button>
+    </div>
+  </section>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
