@@ -1,10 +1,16 @@
 import { questions } from "./questions.js";
 import { db, collection, addDoc, serverTimestamp } from "./firebase.js";
 
+/* -------------------------
+   STATE
+-------------------------- */
 let current = 0;
 let score = 0;
 let startTime = Date.now();
 
+/* -------------------------
+   DOM REFERENCES
+-------------------------- */
 const startScreen = document.getElementById("startScreen");
 const quizScreen = document.getElementById("quizScreen");
 const resultScreen = document.getElementById("resultScreen");
@@ -14,12 +20,22 @@ const optionsEl = document.getElementById("options");
 const progressEl = document.getElementById("progress");
 const counterEl = document.getElementById("questionCounter");
 
+const nameInput = document.getElementById("name");
+const phoneInput = document.getElementById("phone");
+const submitBtn = document.getElementById("submitBtn");
+
+/* -------------------------
+   START QUIZ
+-------------------------- */
 document.getElementById("startBtn").onclick = () => {
   startScreen.classList.remove("active");
   quizScreen.classList.add("active");
   showQuestion();
 };
 
+/* -------------------------
+   QUIZ FLOW
+-------------------------- */
 function showQuestion() {
   const q = questions[current];
   questionEl.innerText = q.q;
@@ -47,6 +63,9 @@ function handleAnswer(i) {
   }
 }
 
+/* -------------------------
+   GIFT LOGIC
+-------------------------- */
 function getGift(score) {
   if (score <= 4) {
     return {
@@ -72,6 +91,9 @@ function getGift(score) {
   };
 }
 
+/* -------------------------
+   SHOW RESULT
+-------------------------- */
 function showResult() {
   quizScreen.classList.remove("active");
   resultScreen.classList.add("active");
@@ -83,16 +105,47 @@ function showResult() {
   document.getElementById("giftMessage").innerText = gift.message;
 }
 
-document.getElementById("submitBtn").onclick = async () => {
-  await addDoc(collection(db, "quizAttempts"), {
-    name: name.value,
-    phone: phone.value,
-    score,
-    gift: getGift(score).label,
-    timeTaken: Math.floor((Date.now() - startTime) / 1000),
-    createdAt: serverTimestamp()
-  });
+/* -------------------------
+   SUBMIT WITH VALIDATION
+-------------------------- */
+submitBtn.onclick = async () => {
+  const name = nameInput.value.trim();
+  const phone = phoneInput.value.trim();
 
-  alert("Thank you!");
-  setTimeout(() => location.reload(), 4000);
+  // 🔒 Validation
+  if (!name) {
+    alert("Please enter your name");
+    nameInput.focus();
+    return;
+  }
+
+  if (!phone) {
+    alert("Please enter your mobile number");
+    phoneInput.focus();
+    return;
+  }
+
+  if (!/^[0-9]{8,15}$/.test(phone)) {
+    alert("Please enter a valid mobile number");
+    phoneInput.focus();
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "quizAttempts"), {
+      name: name,
+      phone: phone,
+      score: score,
+      gift: getGift(score).label,
+      timeTaken: Math.floor((Date.now() - startTime) / 1000),
+      createdAt: serverTimestamp()
+    });
+
+    alert("Thank you! Please proceed to the gift counter.");
+    setTimeout(() => location.reload(), 4000);
+
+  } catch (error) {
+    console.error("Firestore submit error:", error);
+    alert("Submission failed. Please try again.");
+  }
 };
