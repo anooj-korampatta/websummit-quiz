@@ -5,6 +5,9 @@
   --light: #B5B5B5;
   --bg: #F7F7F8;
 }
+html, body, button, input, textarea, .option-card {
+  font-family: "proxima-nova", sans-serif;
+}
 
 /* BODY & FONTS */
 body {
