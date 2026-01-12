@@ -41,7 +41,13 @@ function showQuestion() {
   questionEl.innerText = q.q;
   optionsEl.innerHTML = "";
 
-  progressEl.style.width = `${(current / questions.length) * 100}%`;
+  const progressPercent = current / questions.length;
+const trackWidth = document.getElementById("progressTrack").offsetWidth;
+const cargoWidth = document.getElementById("cargo").offsetWidth;
+
+document.getElementById("cargo").style.left =
+  `${progressPercent * (trackWidth - cargoWidth)}px`;
+
   counterEl.innerText = `${current + 1} / ${questions.length}`;
 
   q.options.forEach((opt, i) => {
