@@ -7,12 +7,15 @@
 
   <!-- Proxima Nova -->
   <link rel="stylesheet" href="https://use.typekit.net/wtc0foh.css">
+
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-<canvas id="bgCanvas"></canvas>
-  <script src="background.js"></script>
+
+  <!-- WORLD MAP BACKGROUND (Lottie) -->
+  <div id="backgroundLottie" class="lottie-bg"></div>
+
   <!-- START SCREEN -->
   <section id="startScreen" class="screen active">
     <h1>SMART LOGISTICS QUIZ</h1>
@@ -47,25 +50,25 @@
   </section>
 
   <!-- RESULT SCREEN -->
-  <!-- RESULT SCREEN -->
-<section id="resultScreen" class="screen">
-  <h2 class="reveal delay-1">Your Score</h2>
+  <section id="resultScreen" class="screen">
+    <div id="lottieConfetti" class="lottie-animation"></div>
 
-  <div id="scoreCircle" class="score-pop delay-2"></div>
+    <h2>Your Score</h2>
+    <div id="scoreCircle" class="score-pop"></div>
 
-  <h3 id="giftCategory" class="reveal delay-3"></h3>
+    <h3 id="giftCategory"></h3>
+    <p id="giftMessage" class="gift-note"></p>
 
-  <p id="giftMessage" class="reveal delay-4 gift-note"></p>
+    <p class="social-cta">
+      Follow <strong>@gwclogistic</strong> on <br>
+      X • Instagram • LinkedIn <br>
+      and collect your gift 🎁
+    </p>
+  </section>
 
-  <p class="social-cta reveal delay-5">
-    Follow <strong>@gwclogistic</strong> on <br>
-    X • Instagram • LinkedIn <br>
-    and collect your gift 🎁
-  </p>
-</section>
-
+  <!-- Lottie Web -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
 
   <script type="module" src="app.js"></script>
-  <div id="confettiContainer"></div>
 </body>
 </html>
