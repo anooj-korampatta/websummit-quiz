@@ -160,6 +160,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // ✅ SHOW RESULT IMMEDIATELY (DO NOT WAIT FOR FIREBASE)
   detailsScreen.classList.remove("active");
   resultScreen.classList.add("active");
+  launchConfetti(); // 🎉 Facebook-style delight
 
   document.getElementById("scoreCircle").innerText = `${score} / 8`;
   document.getElementById("giftCategory").innerText = gift.label;
@@ -180,7 +181,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   // 🔁 AUTO RESET
-  setTimeout(() => location.reload(), 6000);
+  setTimeout(() => location.reload(), 10000);
 });
 
 
