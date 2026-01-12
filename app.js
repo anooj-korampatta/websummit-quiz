@@ -9,139 +9,127 @@ let score = 0;
 let startTime = Date.now();
 
 /* -------------------------
-   DOM READY
+   DOM REFERENCES
 -------------------------- */
-window.addEventListener("DOMContentLoaded", () => {
+const startScreen = document.getElementById("startScreen");
+const quizScreen = document.getElementById("quizScreen");
+const detailsScreen = document.getElementById("detailsScreen");
+const resultScreen = document.getElementById("resultScreen");
 
-  /* -------------------------
-     DOM REFERENCES
-  -------------------------- */
-  const startScreen = document.getElementById("startScreen");
-  const quizScreen = document.getElementById("quizScreen");
-  const detailsScreen = document.getElementById("detailsScreen");
-  const resultScreen = document.getElementById("resultScreen");
+const questionEl = document.getElementById("question");
+const optionsEl = document.getElementById("options");
+const counterEl = document.getElementById("questionCounter");
 
-  const questionEl = document.getElementById("question");
-  const optionsEl = document.getElementById("options");
-  const counterEl = document.getElementById("questionCounter");
+const cargo = document.getElementById("cargo");
+const progressTrack = document.getElementById("progressTrack");
 
-  const cargo = document.getElementById("cargo");
-  const progressTrack = document.getElementById("progressTrack");
+const nameInput = document.getElementById("name");
+const phoneInput = document.getElementById("phone");
+const submitBtn = document.getElementById("submitBtn");
 
-  const nameInput = document.getElementById("name");
-  const phoneInput = document.getElementById("phone");
-  const submitBtn = document.getElementById("submitBtn");
-  const startBtn = document.getElementById("startBtn");
+/* -------------------------
+   LOTTIE BACKGROUND
+-------------------------- */
+lottie.loadAnimation({
+  container: document.getElementById("backgroundLottie"),
+  renderer: "svg",
+  loop: true,
+  autoplay: true,
+  path: "https://assets10.lottiefiles.com/packages/lf20_ZjQZ3V.json" 
+  // world map pinging animation asset
+});
 
-  /* -------------------------
-     START QUIZ
-  -------------------------- */
-  startBtn.addEventListener("click", () => {
-    startScreen.classList.remove("active");
-    quizScreen.classList.add("active");
-    showQuestion();
+/* -------------------------
+   START QUIZ
+-------------------------- */
+startScreen.querySelector("button").onclick = () => {
+  startScreen.classList.remove("active");
+  quizScreen.classList.add("active");
+  showQuestion();
+};
+
+/* -------------------------
+   SHOW QUESTIONS
+-------------------------- */
+function showQuestion() {
+  const q = questions[current];
+  questionEl.innerText = q.q;
+  optionsEl.innerHTML = "";
+
+  counterEl.innerText = `${current + 1} / ${questions.length}`;
+
+  const progressPercent = current / questions.length;
+  const trackWidth = progressTrack.offsetWidth;
+  const cargoWidth = cargo.offsetWidth;
+
+  cargo.style.left =
+    `${progressPercent * (trackWidth - cargoWidth)}px`;
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.innerText = opt;
+    btn.onclick = () => handleAnswer(i);
+    optionsEl.appendChild(btn);
   });
-
-  /* -------------------------
-     SHOW QUESTION
-  -------------------------- */
-  function showQuestion() {
-    const q = questions[current];
-    questionEl.innerText = q.q;
-    optionsEl.innerHTML = "";
-
-    counterEl.innerText = `${current + 1} / ${questions.length}`;
-
-    const progressPercent = current / questions.length;
-    const trackWidth = progressTrack.offsetWidth;
-    const cargoWidth = cargo.offsetWidth;
-
-    cargo.style.left =
-      `${progressPercent * (trackWidth - cargoWidth)}px`;
-
-    q.options.forEach((opt, i) => {
-      const btn = document.createElement("button");
-      btn.innerText = opt;
-      btn.addEventListener("click", () => handleAnswer(i));
-      optionsEl.appendChild(btn);
-    });
-  }
-
-  function handleAnswer(i) {
-    if (i === questions[current].answer) score++;
-    current++;
-
-    if (current < questions.length) {
-      showQuestion();
-    } else {
-      quizScreen.classList.remove("active");
-      detailsScreen.classList.add("active");
-    }
-  }
-
-  /* -------------------------
-     GIFT LOGIC
-  -------------------------- */
-  function getGift(score) {
-    if (score <= 4) {
-      return {
-        label: "☕ Coffee Voucher",
-        message: "Please go to the Gift Counter and collect your Coffee Voucher."
-      };
-    }
-    if (score === 5) {
-      return {
-        label: "🎁 Bronze Gift",
-        message: "Please go to the Gift Counter and collect your Bronze Gift."
-      };
-    }
-    if (score === 6) {
-      return {
-        label: "🧢 Silver Gift",
-        message: "Please go to the Gift Counter and collect your Silver Gift."
-      };
-    }
-    return {
-      label: "🏅 Premium Gift",
-      message: "Congratulations! Please go to the Gift Counter and collect your Premium Gift."
-    };
-  }
-
-   /* -------------------------
-     CONFETTI
-  -------------------------- */ 
-
-   function launchConfetti() {
-  const container = document.getElementById("confettiContainer");
-  container.innerHTML = "";
-
-  const colors = ["#3FAE2A", "#00ABC7", "#B5B5B5"];
-
-  for (let i = 0; i < 24; i++) {
-    const confetti = document.createElement("div");
-    confetti.className = "confetti";
-    confetti.style.left = `${Math.random() * 100}%`;
-    confetti.style.top = "60%";
-    confetti.style.background =
-      colors[Math.floor(Math.random() * colors.length)];
-    confetti.style.animationDelay = `${Math.random() * 0.4}s`;
-
-    container.appendChild(confetti);
-  }
-
-  // Auto cleanup
-  setTimeout(() => {
-    container.innerHTML = "";
-  }, 3000);
 }
 
+function handleAnswer(i) {
+  if (i === questions[current].answer) score++;
+  current++;
 
-  /* -------------------------
-     SUBMIT → SHOW SCORE
-  -------------------------- */
-  submitBtn.addEventListener("click", async () => {
-  console.log("VIEW SCORE clicked");
+  if (current < questions.length) {
+    showQuestion();
+  } else {
+    quizScreen.classList.remove("active");
+    detailsScreen.classList.add("active");
+  }
+}
 
+/* -------------------------
+   GET GIFT
+-------------------------- */
+function getGift(score) {
+  if (score <= 4) {
+    return {
+      label: "☕ Coffee Voucher",
+      message: "Please go to the Gift Counter and collect your Coffee Voucher."
+    };
+  }
+  if (score === 5) {
+    return {
+      label: "🎁 Bronze Gift",
+      message: "Please go to the Gift Counter and collect your Bronze Gift."
+    };
+  }
+  if (score === 6) {
+    return {
+      label: "🧢 Silver Gift",
+      message: "Please go to the Gift Counter and collect your Silver Gift."
+    };
+  }
+  return {
+    label: "🏅 Premium Gift",
+    message: "Congratulations! Please go to the Gift Counter and collect your Premium Gift."
+  };
+}
+
+/* -------------------------
+   LOTTIE CONFETTI
+-------------------------- */
+function playLottieConfetti() {
+  lottie.loadAnimation({
+    container: document.getElementById("lottieConfetti"),
+    renderer: "svg",
+    loop: false,
+    autoplay: true,
+    path: "https://assets10.lottiefiles.com/packages/lf20_xdfeea13.json"
+  });
+}
+
+/* -------------------------
+   SUBMIT & SHOW SCORE
+-------------------------- */
+submitBtn.onclick = () => {
   const name = nameInput.value.trim();
   const phone = phoneInput.value.trim();
 
@@ -149,7 +137,6 @@ window.addEventListener("DOMContentLoaded", () => {
     alert("Please enter your name");
     return;
   }
-
   if (!phone || !/^[0-9]{8,15}$/.test(phone)) {
     alert("Please enter a valid mobile number");
     return;
@@ -157,32 +144,26 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const gift = getGift(score);
 
-  // ✅ SHOW RESULT IMMEDIATELY (DO NOT WAIT FOR FIREBASE)
+  // Show result immediately
   detailsScreen.classList.remove("active");
   resultScreen.classList.add("active");
-  launchConfetti(); // 🎉 Facebook-style delight
 
   document.getElementById("scoreCircle").innerText = `${score} / 8`;
   document.getElementById("giftCategory").innerText = gift.label;
   document.getElementById("giftMessage").innerText = gift.message;
 
-  // ⏳ SAVE TO FIREBASE IN BACKGROUND
-  try {
-    addDoc(collection(db, "quizAttempts"), {
-      name,
-      phone,
-      score,
-      gift: gift.label,
-      timeTaken: Math.floor((Date.now() - startTime) / 1000),
-      createdAt: serverTimestamp()
-    });
-  } catch (err) {
-    console.error("Firestore save failed:", err);
-  }
+  // Confetti
+  playLottieConfetti();
 
-  // 🔁 AUTO RESET
-  setTimeout(() => location.reload(), 10000);
-});
+  // Save to Firebase (background)
+  addDoc(collection(db, "quizAttempts"), {
+    name,
+    phone,
+    score,
+    gift: gift.label,
+    timeTaken: Math.floor((Date.now() - startTime) / 1000),
+    createdAt: serverTimestamp()
+  }).catch(err => console.error("DB save error:", err));
 
-
-});
+  setTimeout(() => location.reload(), 6000);
+};
