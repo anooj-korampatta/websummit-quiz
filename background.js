@@ -9,36 +9,53 @@ function resize() {
 resize();
 window.addEventListener("resize", resize);
 
-const dots = Array.from({ length: 40 }).map(() => ({
+// Logistics hubs
+const hubs = Array.from({ length: 36 }).map(() => ({
   x: Math.random() * w,
   y: Math.random() * h,
-  vx: Math.random() * 0.3 + 0.1,
+  vx: Math.random() * 0.15 + 0.05
 }));
 
-function draw() {
+function drawCurve(a, b) {
+  const cx = (a.x + b.x) / 2;
+  const cy = Math.min(a.y, b.y) - 60;
+
+  ctx.beginPath();
+  ctx.moveTo(a.x, a.y);
+  ctx.quadraticCurveTo(cx, cy, b.x, b.y);
+  ctx.stroke();
+}
+
+function animate() {
   ctx.clearRect(0, 0, w, h);
-  ctx.strokeStyle = "rgba(0,171,199,0.15)";
-  ctx.fillStyle = "#3FAE2A";
 
-  dots.forEach((d, i) => {
-    d.x += d.vx;
-    if (d.x > w) d.x = 0;
+  ctx.strokeStyle = "rgba(0,171,199,0.12)";
+  ctx.lineWidth = 1;
 
-    ctx.beginPath();
-    ctx.arc(d.x, d.y, 2, 0, Math.PI * 2);
-    ctx.fill();
+  hubs.forEach(h => {
+    h.x += h.vx;
+    if (h.x > w + 50) h.x = -50;
+  });
 
-    dots.forEach(o => {
-      const dist = Math.hypot(d.x - o.x, d.y - o.y);
-      if (dist < 120) {
-        ctx.beginPath();
-        ctx.moveTo(d.x, d.y);
-        ctx.lineTo(o.x, o.y);
-        ctx.stroke();
+  // Draw curved routes
+  hubs.forEach((a, i) => {
+    hubs.forEach((b, j) => {
+      if (i !== j) {
+        const d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d < 220) drawCurve(a, b);
       }
     });
   });
 
-  requestAnimationFrame(draw);
+  // Draw hubs
+  ctx.fillStyle = "#3FAE2A";
+  hubs.forEach(h => {
+    ctx.beginPath();
+    ctx.arc(h.x, h.y, 2.3, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  requestAnimationFrame(animate);
 }
-draw();
+
+animate();
