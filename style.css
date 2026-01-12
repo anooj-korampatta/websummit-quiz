@@ -182,3 +182,37 @@ button:active {
   color: var(--secondary);
 }
 
+/* -------------------------
+   FACEBOOK-STYLE CONFETTI
+-------------------------- */
+
+#confettiContainer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.confetti {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  opacity: 0;
+  animation: confettiFloat 2.8s ease-out forwards;
+  border-radius: 2px;
+}
+
+@keyframes confettiFloat {
+  0% {
+    transform: translateY(40px) scale(0.6) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-220px) scale(1) rotate(360deg);
+    opacity: 0;
+  }
+}
