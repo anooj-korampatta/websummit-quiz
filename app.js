@@ -111,21 +111,36 @@ function getGift(score) {
 /* -------------------------
    CONFETTI POPPER (LOTTIE)
 -------------------------- */
-function playConfettiPopper() {
+function playConfettiPopper(isGold = false) {
   const container = document.getElementById("lottieConfetti");
 
-  // Hard reset (important for replay)
+  // Clear any previous animation
   container.innerHTML = "";
 
+  // First burst
   lottie.loadAnimation({
     container: container,
     renderer: "svg",
     loop: false,
     autoplay: true,
     path: "https://assets9.lottiefiles.com/packages/lf20_touohxv0.json"
-    // TRUE burst / popper style
   });
+
+  // Extra burst ONLY for Gold winners
+  if (isGold) {
+    setTimeout(() => {
+      container.innerHTML = "";
+      lottie.loadAnimation({
+        container: container,
+        renderer: "svg",
+        loop: false,
+        autoplay: true,
+        path: "https://assets9.lottiefiles.com/packages/lf20_touohxv0.json"
+      });
+    }, 700); // short delay = premium feel
+  }
 }
+
 
 /* -------------------------
    SUBMIT → SHOW SCORE
