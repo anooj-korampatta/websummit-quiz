@@ -171,5 +171,5 @@ submitBtn.onclick = () => {
   }).catch(err => console.error("Firestore save failed:", err));
 
   // Auto reset
-  setTimeout(() => location.reload(), 6000);
+  setTimeout(() => location.reload(), 20000);
 };
