@@ -66,11 +66,16 @@ function showQuestion() {
     `${progressPercent * (trackWidth - cargoWidth)}px`;
 
   q.options.forEach((opt, i) => {
-    const btn = document.createElement("button");
-    btn.innerText = opt;
-    btn.onclick = () => handleAnswer(i);
-    optionsEl.appendChild(btn);
-  });
+  const card = document.createElement("div");
+  card.className = "option-card";
+  card.innerHTML = `
+    <div class="option-label">${opt}</div>
+  `;
+
+  card.addEventListener("click", () => handleAnswer(i));
+  optionsEl.appendChild(card);
+});
+
 }
 
 function handleAnswer(i) {
