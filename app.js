@@ -13,12 +13,15 @@ let startTime = Date.now();
 -------------------------- */
 const startScreen = document.getElementById("startScreen");
 const quizScreen = document.getElementById("quizScreen");
+const detailsScreen = document.getElementById("detailsScreen");
 const resultScreen = document.getElementById("resultScreen");
 
 const questionEl = document.getElementById("question");
 const optionsEl = document.getElementById("options");
-const progressEl = document.getElementById("progress");
 const counterEl = document.getElementById("questionCounter");
+
+const cargo = document.getElementById("cargo");
+const progressTrack = document.getElementById("progressTrack");
 
 const nameInput = document.getElementById("name");
 const phoneInput = document.getElementById("phone");
@@ -41,14 +44,14 @@ function showQuestion() {
   questionEl.innerText = q.q;
   optionsEl.innerHTML = "";
 
-  const progressPercent = current / questions.length;
-const trackWidth = document.getElementById("progressTrack").offsetWidth;
-const cargoWidth = document.getElementById("cargo").offsetWidth;
-
-document.getElementById("cargo").style.left =
-  `${progressPercent * (trackWidth - cargoWidth)}px`;
-
   counterEl.innerText = `${current + 1} / ${questions.length}`;
+
+  const progressPercent = current / questions.length;
+  const trackWidth = progressTrack.offsetWidth;
+  const cargoWidth = cargo.offsetWidth;
+
+  cargo.style.left =
+    `${progressPercent * (trackWidth - cargoWidth)}px`;
 
   q.options.forEach((opt, i) => {
     const btn = document.createElement("button");
@@ -65,7 +68,8 @@ function handleAnswer(i) {
   if (current < questions.length) {
     showQuestion();
   } else {
-    showResult();
+    quizScreen.classList.remove("active");
+    detailsScreen.classList.add("active");
   }
 }
 
@@ -98,60 +102,47 @@ function getGift(score) {
 }
 
 /* -------------------------
-   SHOW RESULT
--------------------------- */
-function showResult() {
-  quizScreen.classList.remove("active");
-  resultScreen.classList.add("active");
-
-  const gift = getGift(score);
-
-  document.getElementById("scoreCircle").innerText = `${score} / 8`;
-  document.getElementById("giftCategory").innerText = gift.label;
-  document.getElementById("giftMessage").innerText = gift.message;
-}
-
-/* -------------------------
-   SUBMIT WITH VALIDATION
+   SUBMIT → SHOW SCORE
 -------------------------- */
 submitBtn.onclick = async () => {
   const name = nameInput.value.trim();
   const phone = phoneInput.value.trim();
 
-  // 🔒 Validation
+  // Validation
   if (!name) {
     alert("Please enter your name");
-    nameInput.focus();
     return;
   }
 
-  if (!phone) {
-    alert("Please enter your mobile number");
-    phoneInput.focus();
-    return;
-  }
-
-  if (!/^[0-9]{8,15}$/.test(phone)) {
+  if (!phone || !/^[0-9]{8,15}$/.test(phone)) {
     alert("Please enter a valid mobile number");
-    phoneInput.focus();
     return;
   }
+
+  const gift = getGift(score);
 
   try {
     await addDoc(collection(db, "quizAttempts"), {
-      name: name,
-      phone: phone,
-      score: score,
-      gift: getGift(score).label,
+      name,
+      phone,
+      score,
+      gift: gift.label,
       timeTaken: Math.floor((Date.now() - startTime) / 1000),
       createdAt: serverTimestamp()
     });
 
-    alert("Thank you! Please proceed to the gift counter.");
-    setTimeout(() => location.reload(), 4000);
+    // Show result only AFTER submit
+    detailsScreen.classList.remove("active");
+    resultScreen.classList.add("active");
 
-  } catch (error) {
-    console.error("Firestore submit error:", error);
-    alert("Submission failed. Please try again.");
+    document.getElementById("scoreCircle").innerText = `${score} / 8`;
+    document.getElementById("giftCategory").innerText = gift.label;
+    document.getElementById("giftMessage").innerText = gift.message;
+
+    setTimeout(() => location.reload(), 6000);
+
+  } catch (err) {
+    console.error("Submit failed:", err);
+    alert("Something went wrong. Please try again.");
   }
 };
