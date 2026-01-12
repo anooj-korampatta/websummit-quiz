@@ -111,46 +111,48 @@ window.addEventListener("DOMContentLoaded", () => {
      SUBMIT → SHOW SCORE
   -------------------------- */
   submitBtn.addEventListener("click", async () => {
-    console.log("VIEW SCORE clicked"); // 🔍 debug log
+  console.log("VIEW SCORE clicked");
 
-    const name = nameInput.value.trim();
-    const phone = phoneInput.value.trim();
+  const name = nameInput.value.trim();
+  const phone = phoneInput.value.trim();
 
-    if (!name) {
-      alert("Please enter your name");
-      return;
-    }
+  if (!name) {
+    alert("Please enter your name");
+    return;
+  }
 
-    if (!phone || !/^[0-9]{8,15}$/.test(phone)) {
-      alert("Please enter a valid mobile number");
-      return;
-    }
+  if (!phone || !/^[0-9]{8,15}$/.test(phone)) {
+    alert("Please enter a valid mobile number");
+    return;
+  }
 
-    const gift = getGift(score);
+  const gift = getGift(score);
 
-    try {
-      await addDoc(collection(db, "quizAttempts"), {
-        name,
-        phone,
-        score,
-        gift: gift.label,
-        timeTaken: Math.floor((Date.now() - startTime) / 1000),
-        createdAt: serverTimestamp()
-      });
+  // ✅ SHOW RESULT IMMEDIATELY (DO NOT WAIT FOR FIREBASE)
+  detailsScreen.classList.remove("active");
+  resultScreen.classList.add("active");
 
-      detailsScreen.classList.remove("active");
-      resultScreen.classList.add("active");
+  document.getElementById("scoreCircle").innerText = `${score} / 8`;
+  document.getElementById("giftCategory").innerText = gift.label;
+  document.getElementById("giftMessage").innerText = gift.message;
 
-      document.getElementById("scoreCircle").innerText = `${score} / 8`;
-      document.getElementById("giftCategory").innerText = gift.label;
-      document.getElementById("giftMessage").innerText = gift.message;
+  // ⏳ SAVE TO FIREBASE IN BACKGROUND
+  try {
+    addDoc(collection(db, "quizAttempts"), {
+      name,
+      phone,
+      score,
+      gift: gift.label,
+      timeTaken: Math.floor((Date.now() - startTime) / 1000),
+      createdAt: serverTimestamp()
+    });
+  } catch (err) {
+    console.error("Firestore save failed:", err);
+  }
 
-      setTimeout(() => location.reload(), 6000);
+  // 🔁 AUTO RESET
+  setTimeout(() => location.reload(), 6000);
+});
 
-    } catch (err) {
-      console.error("Firestore error:", err);
-      alert("Submission failed. Check console.");
-    }
-  });
 
 });
