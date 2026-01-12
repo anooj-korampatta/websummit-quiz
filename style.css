@@ -3,58 +3,62 @@
   --secondary: #00ABC7;
   --dark: #555555;
   --light: #B5B5B5;
-  --bg: #F7F7F7;
-}
-#bgCanvas {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(180deg, #ffffff, #f3f6f8);
+  --bg: #F7F7F8;
 }
 
-* {
-  box-sizing: border-box;
-}
-
+/* BODY & FONTS */
 body {
   margin: 0;
+  padding: 0;
   font-family: "proxima-nova", sans-serif;
   background: var(--bg);
-  color: var(--dark);
+  overflow: hidden;
 }
 
+/* BACKGROUND LOTTIE */
+.lottie-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  pointer-events: none;
+}
+
+/* SCREEN LAYOUT */
 .screen {
   display: none;
+  width: 100%;
   height: 100vh;
-  padding: 40px 24px;
   text-align: center;
+  padding: 32px;
+  box-sizing: border-box;
 }
 
 .screen.active {
   display: block;
 }
 
-h1 {
-  font-size: 36px;
+/* START SCREEN */
+#startScreen h1 {
+  font-size: 40px;
+  color: var(--primary);
+}
+#startScreen p {
+  color: var(--dark);
+  margin-bottom: 30px;
 }
 
-h2 {
-  font-size: 28px;
-}
-
-p {
-  color: var(--light);
-}
-
+/* BUTTONS */
 button {
   width: 100%;
-  min-height: 70px;
+  max-width: 360px;
+  margin: 12px auto;
+  height: 60px;
   font-size: 22px;
-  border: none;
-  border-radius: 12px;
+  font-weight: 600;
+  color: white;
   background: var(--primary);
-  color: #fff;
-  margin-top: 20px;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -62,11 +66,10 @@ button:active {
   transform: scale(0.97);
 }
 
-/* Progress */
-/* Cargo Progress Bar */
+/* PROGRESS BAR */
 #progressBar {
   width: 100%;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 #progressTrack {
@@ -91,128 +94,56 @@ button:active {
     #00ABC7 16px
   );
   border-radius: 8px;
-  transition: left 0.5s ease;
+  transition: left 0.4s ease;
 }
-
 
 #questionCounter {
   font-size: 16px;
-  color: var(--light);
-  margin-bottom: 20px;
+  color: var(--dark);
+  margin-bottom: 16px;
 }
 
-/* Options */
 #options button {
   background: #fff;
   color: var(--dark);
   border: 2px solid var(--light);
+  margin-top: 10px;
 }
 
-/* Result */
-#scoreCircle {
-  font-size: 48px;
-  font-weight: bold;
-  color: var(--primary);
-  margin: 20px 0;
-}
-
-.gift-note {
-  font-size: 18px;
-  margin-bottom: 20px;
-}
-
+/* DETAIL FORM */
 .form input {
   width: 100%;
-  min-height: 60px;
+  max-width: 360px;
+  margin: 8px auto;
+  height: 56px;
   font-size: 20px;
-  margin: 10px 0;
-  padding: 10px;
-}
-/* -------------------------
-   TEXT DELIGHT ANIMATIONS
--------------------------- */
-
-.reveal {
-  opacity: 0;
-  transform: translateY(12px);
-  animation: fadeUp 0.6s ease forwards;
+  padding: 8px;
+  border: 2px solid var(--light);
+  border-radius: 8px;
 }
 
-.delay-1 { animation-delay: 0.2s; }
-.delay-2 { animation-delay: 0.4s; }
-.delay-3 { animation-delay: 0.6s; }
-.delay-4 { animation-delay: 0.8s; }
-.delay-5 { animation-delay: 1s; }
-
-@keyframes fadeUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Score delight */
-.score-pop {
-  font-size: 56px;
-  font-weight: 700;
+/* RESULT SCREEN */
+#scoreCircle {
+  font-size: 60px;
+  font-weight: bold;
   color: var(--primary);
-  margin: 20px 0;
-  opacity: 0;
-  transform: scale(0.85);
-  animation: popIn 0.5s ease forwards;
-  animation-delay: 0.35s;
+  margin: 18px 0;
 }
 
-@keyframes popIn {
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Social CTA */
-.social-cta {
-  margin-top: 24px;
-  font-size: 16px;
+/* GIFT & MESSAGE */
+.gift-note, .social-cta {
+  font-size: 18px;
   color: var(--dark);
-  line-height: 1.5;
 }
 
 .social-cta strong {
   color: var(--secondary);
 }
 
-/* -------------------------
-   FACEBOOK-STYLE CONFETTI
--------------------------- */
-
-#confettiContainer {
-  position: fixed;
+/* LOTTIE ANIMATIONS */
+.lottie-animation {
+  position: absolute;
   inset: 0;
   pointer-events: none;
-  overflow: hidden;
-  z-index: 10;
-}
-
-.confetti {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  opacity: 0;
-  animation: confettiFloat 2.8s ease-out forwards;
-  border-radius: 2px;
-}
-
-@keyframes confettiFloat {
-  0% {
-    transform: translateY(40px) scale(0.6) rotate(0deg);
-    opacity: 0;
-  }
-  15% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-220px) scale(1) rotate(360deg);
-    opacity: 0;
-  }
+  z-index: 20;
 }
