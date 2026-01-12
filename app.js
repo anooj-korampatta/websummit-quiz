@@ -156,7 +156,7 @@ submitBtn.onclick = () => {
   document.getElementById("giftMessage").innerText = gift.message;
 
   // 🎉 CONFETTI POPPER (only for winners)
-  if (score >= 5) {
+  if (score >= 1) {
     playConfettiPopper();
   }
 
