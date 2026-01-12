@@ -28,28 +28,16 @@ const phoneInput = document.getElementById("phone");
 const submitBtn = document.getElementById("submitBtn");
 
 /* -------------------------
-   LOTTIE BACKGROUND
--------------------------- */
-lottie.loadAnimation({
-  container: document.getElementById("backgroundLottie"),
-  renderer: "svg",
-  loop: true,
-  autoplay: true,
-  path: "https://assets10.lottiefiles.com/packages/lf20_ZjQZ3V.json" 
-  // world map pinging animation asset
-});
-
-/* -------------------------
    START QUIZ
 -------------------------- */
-startScreen.querySelector("button").onclick = () => {
+document.getElementById("startBtn").onclick = () => {
   startScreen.classList.remove("active");
   quizScreen.classList.add("active");
   showQuestion();
 };
 
 /* -------------------------
-   SHOW QUESTIONS
+   SHOW QUESTION
 -------------------------- */
 function showQuestion() {
   const q = questions[current];
@@ -58,6 +46,7 @@ function showQuestion() {
 
   counterEl.innerText = `${current + 1} / ${questions.length}`;
 
+  // Cargo progress animation
   const progressPercent = current / questions.length;
   const trackWidth = progressTrack.offsetWidth;
   const cargoWidth = cargo.offsetWidth;
@@ -65,19 +54,20 @@ function showQuestion() {
   cargo.style.left =
     `${progressPercent * (trackWidth - cargoWidth)}px`;
 
+  // Render options as TOUCH CARDS
   q.options.forEach((opt, i) => {
-  const card = document.createElement("div");
-  card.className = "option-card";
-  card.innerHTML = `
-    <div class="option-label">${opt}</div>
-  `;
+    const card = document.createElement("div");
+    card.className = "option-card";
+    card.innerHTML = `<div class="option-label">${opt}</div>`;
 
-  card.addEventListener("click", () => handleAnswer(i));
-  optionsEl.appendChild(card);
-});
-
+    card.addEventListener("click", () => handleAnswer(i));
+    optionsEl.appendChild(card);
+  });
 }
 
+/* -------------------------
+   HANDLE ANSWER
+-------------------------- */
 function handleAnswer(i) {
   if (i === questions[current].answer) score++;
   current++;
@@ -91,7 +81,7 @@ function handleAnswer(i) {
 }
 
 /* -------------------------
-   GET GIFT
+   GIFT LOGIC
 -------------------------- */
 function getGift(score) {
   if (score <= 4) {
@@ -119,29 +109,37 @@ function getGift(score) {
 }
 
 /* -------------------------
-   LOTTIE CONFETTI
+   CONFETTI POPPER (LOTTIE)
 -------------------------- */
-function playLottieConfetti() {
+function playConfettiPopper() {
+  const container = document.getElementById("lottieConfetti");
+
+  // Hard reset (important for replay)
+  container.innerHTML = "";
+
   lottie.loadAnimation({
-    container: document.getElementById("lottieConfetti"),
+    container: container,
     renderer: "svg",
     loop: false,
     autoplay: true,
-    path: "https://assets10.lottiefiles.com/packages/lf20_xdfeea13.json"
+    path: "https://assets9.lottiefiles.com/packages/lf20_touohxv0.json"
+    // TRUE burst / popper style
   });
 }
 
 /* -------------------------
-   SUBMIT & SHOW SCORE
+   SUBMIT → SHOW SCORE
 -------------------------- */
 submitBtn.onclick = () => {
   const name = nameInput.value.trim();
   const phone = phoneInput.value.trim();
 
+  // Validation
   if (!name) {
     alert("Please enter your name");
     return;
   }
+
   if (!phone || !/^[0-9]{8,15}$/.test(phone)) {
     alert("Please enter a valid mobile number");
     return;
@@ -149,7 +147,7 @@ submitBtn.onclick = () => {
 
   const gift = getGift(score);
 
-  // Show result immediately
+  // SHOW RESULT IMMEDIATELY (expo-safe UX)
   detailsScreen.classList.remove("active");
   resultScreen.classList.add("active");
 
@@ -157,10 +155,12 @@ submitBtn.onclick = () => {
   document.getElementById("giftCategory").innerText = gift.label;
   document.getElementById("giftMessage").innerText = gift.message;
 
-  // Confetti
-  playLottieConfetti();
+  // 🎉 CONFETTI POPPER (only for winners)
+  if (score >= 5) {
+    playConfettiPopper();
+  }
 
-  // Save to Firebase (background)
+  // Save to Firebase in background (never block UI)
   addDoc(collection(db, "quizAttempts"), {
     name,
     phone,
@@ -168,7 +168,8 @@ submitBtn.onclick = () => {
     gift: gift.label,
     timeTaken: Math.floor((Date.now() - startTime) / 1000),
     createdAt: serverTimestamp()
-  }).catch(err => console.error("DB save error:", err));
+  }).catch(err => console.error("Firestore save failed:", err));
 
+  // Auto reset
   setTimeout(() => location.reload(), 6000);
 };
