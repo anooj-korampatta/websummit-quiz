@@ -19,8 +19,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
-// Optional: remove offline cache for now
-// Firestore will still work perfectly without this
-
+enableIndexedDbPersistence(db).catch(() => {});
 
 export { collection, addDoc, serverTimestamp };
