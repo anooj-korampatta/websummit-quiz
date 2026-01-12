@@ -145,11 +145,24 @@ button:active {
 
 /* LOTTIE ANIMATIONS */
 .lottie-animation {
-  position: absolute;
+  position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 20;
+  z-index: 999;
+
+  /* Center but push slightly down */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(40px);
 }
+
+/* Make the burst slightly smaller */
+.lottie-animation svg {
+  width: 70%;
+  height: 70%;
+}
+
 /* -------------------------
    TOUCH OPTION CARDS
 -------------------------- */
