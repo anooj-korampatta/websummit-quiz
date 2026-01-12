@@ -107,6 +107,35 @@ window.addEventListener("DOMContentLoaded", () => {
     };
   }
 
+   /* -------------------------
+     CONFETTI
+  -------------------------- */ 
+
+   function launchConfetti() {
+  const container = document.getElementById("confettiContainer");
+  container.innerHTML = "";
+
+  const colors = ["#3FAE2A", "#00ABC7", "#B5B5B5"];
+
+  for (let i = 0; i < 24; i++) {
+    const confetti = document.createElement("div");
+    confetti.className = "confetti";
+    confetti.style.left = `${Math.random() * 100}%`;
+    confetti.style.top = "60%";
+    confetti.style.background =
+      colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.animationDelay = `${Math.random() * 0.4}s`;
+
+    container.appendChild(confetti);
+  }
+
+  // Auto cleanup
+  setTimeout(() => {
+    container.innerHTML = "";
+  }, 3000);
+}
+
+
   /* -------------------------
      SUBMIT → SHOW SCORE
   -------------------------- */
