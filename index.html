@@ -7,12 +7,11 @@
 
   <!-- Proxima Nova -->
   <link rel="stylesheet" href="https://use.typekit.net/wtc0foh.css">
-
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-<canvas id="bgCanvas"></canvas>
+
   <!-- START SCREEN -->
   <section id="startScreen" class="screen active">
     <h1>SMART LOGISTICS QUIZ</h1>
@@ -23,17 +22,27 @@
   <!-- QUIZ SCREEN -->
   <section id="quizScreen" class="screen">
     <div id="progressBar">
-  <div id="progressTrack">
-    <div id="cargo"></div>
-  </div>
-</div>
-
+      <div id="progressTrack">
+        <div id="cargo"></div>
+      </div>
     </div>
 
     <div id="questionCounter">1 / 8</div>
 
     <h2 id="question"></h2>
     <div id="options"></div>
+  </section>
+
+  <!-- DETAILS SCREEN -->
+  <section id="detailsScreen" class="screen">
+    <h2>Almost done!</h2>
+    <p>Enter your details to see your score</p>
+
+    <div class="form">
+      <input id="name" placeholder="Name" />
+      <input id="phone" placeholder="Mobile Number" />
+      <button id="submitBtn">VIEW SCORE</button>
+    </div>
   </section>
 
   <!-- RESULT SCREEN -->
@@ -43,16 +52,9 @@
 
     <h3 id="giftCategory"></h3>
     <p id="giftMessage" class="gift-note"></p>
-
-    <div class="form">
-      <input id="name" placeholder="Name" />
-      <input id="phone" placeholder="Mobile Number" />
-      <button id="submitBtn">SUBMIT</button>
-    </div>
   </section>
 
   <script type="module" src="app.js"></script>
   <script src="background.js"></script>
-
 </body>
 </html>
